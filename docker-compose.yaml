@@ -1,16 +1,16 @@
 services:
-  rabbitmq:
-    image: rabbitmq:4.0.7
+  redis:
+    container_name: redis
+    image: redis:latest
     ports:
-      - "15672:15672"  # RabbitMQ Management UI
-      - "5672:5672"    # RabbitMQ AMQP protocol
+      - 6379:6379
+
+  redis-commander:
+    container_name: redis-commander
+    image: rediscommander/redis-commander:latest
+    ports:
+      - 8081:8081
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-
-
-volumes:
-  rabbitmq_data:
-    driver: local
+      - REDIS_HOSTS=local:6379
+    depends_on:
+      - redis
